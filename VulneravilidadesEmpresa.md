@@ -1,1 +1,11 @@
-
+| Vulnerabilidad | Origen (diseño / implementación / uso) | Amenaza que la explota | Física / Lógica | C-I-D afectada |
+| --- | --- | --- | --- | --- |
+| Contraseña en post-it | Uso | Alguien la lee al pasar por la mesa[cite: 1] | Física → deriva en lógica | Confidencialidad |
+| Archivador sin llave | Uso | Robo o consulta no autorizada de documentos | Física | Confidencialidad |
+| Falta de validación de entradas en formulario (SQL Injection) | Diseño / Implementación | Inyección de código malicioso para acceder o borrar la base de datos | Lógica | Confidencialidad / Integridad / Disponibilidad |
+| Ausencia de copia de seguridad (Backup) organizada | Diseño | Ataque por Ransomware o fallo de disco duro que destruye los datos | Lógica | Disponibilidad |
+| Servidor de producción sin parches de seguridad actualizados | Implementación | Explotación de vulnerabilidades conocidas por parte de un atacante remoto | Lógica | Confidencialidad / Integridad / Disponibilidad |
+| Ausencia de SAI (Sistema de Alimentación Ininterrumpida) | Diseño | Corte del suministro eléctrico que apaga el centro de datos | Física | Disponibilidad |
+| Uso de redes Wi-Fi públicas no cifradas para acceso corporativo | Uso | Intercepción de tráfico (Man-in-the-Middle) por parte de terceros | Lógica | Confidencialidad |
+| Pantalla del ordenador desatendida sin bloqueo automático | Uso | Un visitante u otro empleado accede o modifica información confidencial | Física → deriva en lógica | Confidencialidad / Integridad |
+| Contraseñas por defecto en routers/dispositivos IoT | Implementación | Acceso no autorizado de atacantes automatizados | Lógica | Confidencialidad / Integridad |
