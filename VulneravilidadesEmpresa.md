@@ -1,6 +1,6 @@
 | Vulnerabilidad | Origen (diseño / implementación / uso) | Amenaza que la explota | Física / Lógica | C-I-D afectada |
 | --- | --- | --- | --- | --- |
-| Contraseña en post-it | Uso | Alguien la lee al pasar por la mesa[cite: 1] | Física → deriva en lógica | Confidencialidad |
+| Contraseña en post-it | Uso | Alguien la lee al pasar por la mesa | Física → deriva en lógica | Confidencialidad |
 | Archivador sin llave | Uso | Robo o consulta no autorizada de documentos | Física | Confidencialidad |
 | Falta de validación de entradas en formulario (SQL Injection) | Diseño / Implementación | Inyección de código malicioso para acceder o borrar la base de datos | Lógica | Confidencialidad / Integridad / Disponibilidad |
 | Ausencia de copia de seguridad (Backup) organizada | Diseño | Ataque por Ransomware o fallo de disco duro que destruye los datos | Lógica | Disponibilidad |
