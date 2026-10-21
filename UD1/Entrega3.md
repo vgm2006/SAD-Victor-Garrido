@@ -34,7 +34,7 @@ El escaneo encontró las siguientes vulnerabilidades, clasificadas con la escala
 | Alta        | 7.0 – 8.9       | 4        |
 | Media       | 4.0 – 6.9       | 22       |
 | Baja        | 0.1 – 3.9       | 8        |
-| Informativa | 0.0             |      |
+| Informativa | 0.0             |          |
 
 Las vulnerabilidades con la puntuación más alta son:
 
@@ -77,7 +77,7 @@ Vulnerabilidad elegida: **VNC Server 'password' Password** (Crítica, CVSS 10.0)
 Ordenadas de más a menos urgente:
 
 1. **Cambiar las contraseñas por defecto y débiles:** Es lo más rápido de arreglar y lo que más riesgo quita.
-2. **Cerrar los servicios peligrosos que no hacen falta**: la shell abierta del puerto 1524 y Telnet. Además, poner un firewall que solo deje pasar los puertos necesarios.
+2. **Cerrar los servicios peligrosos que no hacen falta**: la shell abierta del puerto 1524, Telnet y VNC. Además, poner un firewall que solo deje pasar los puertos necesarios.
 3. **Actualizar o sustituir el sistema operativo y los programas.** Ubuntu 8.04 hace años que no recibe parches de seguridad, así que muchos fallos no se pueden arreglar sin actualizar a una versión con soporte.
 
 ## 7. Conclusión
