@@ -29,18 +29,14 @@ La opción -s es "simular". Fijaos en que dice qué instalaría, pero no toca na
 
 A4. ¿Y si el sistema ya no recibe parches? Buscad en https://endoflife.date la fecha de fin de soporte de:
 
-La versión de Ubuntu/Debian de vuestro Torrent-Auditor.
-Ubuntu 8.04, la que tiene Torrent-Vulnerable (Metasploitable2).
-Rellenad:
+| Sistema | Fecha de fin de soporte | ¿Recibe parches hoy? |
+| ------- | ----------------------- | -------------------- |
+| Torrent-Auditor | 31 de mayo de 2029 | Si |
+| Torrent-Vulnerable | 9 de mayo de 2013 | No |
 
-Sistema	Fecha de fin de soporte	¿Recibe parches hoy?
-Torrent-Auditor: 31/05/2029	Sí	
-Torrent-Vulnerable (Ubuntu 8.04): Según endoflife.date, Ubuntu 8.04 dejó de recibir soporte el 9 de mayo de 2013 en su edición Server
-		
 Pregunta A: En la oferta de empleo de Torrent (dossier de la UD02) decían que trabajaban con "Ubuntu 8.04". Aunque pusieran todas las contraseñas bien, ¿qué problema sigue sin tener solución?
 
-Aunque todas las contraseñas sean seguras, Ubuntu 8.04 ya no recibe actualizaciones ni parches de seguridad oficiales desde 2013. Esto significa que las vulnerabilidades descubiertas posteriormente pueden seguir sin corregirse y los atacantes podrían 
-aprovecharlas para acceder al sistema. La solución es migrar a una versión que todavía tenga soporte.
+El uso de contraseñas seguras es insuficiente en Ubuntu 8.04, ya que el sistema operativo no recibe actualizaciones de seguridad desde 2013. Como resultado, cualquier fallo de seguridad descubierto desde entonces permanece expuesto a posibles intrusiones. La única solución viable es realizar una migración hacia una versión actual que mantenga el soporte activo.
 
 ## Parte B · ¿De dónde vienen los programas instalados?
 B1. Mirad de qué repositorios se descarga vuestro sistema:
@@ -48,18 +44,19 @@ B1. Mirad de qué repositorios se descarga vuestro sistema:
 cat /etc/apt/sources.list
 ls /etc/apt/sources.list.d/
 Investiga el fichero donde están configurados los repositorios y comenta el significado de cada una de las líneas y su contenido.
-<img width="785" height="160" alt="image" src="https://github.com/user-attachments/assets/774a7989-a25d-4391-bbcf-d17d751bdedb" />
-<img width="666" height="142" alt="image" src="https://github.com/user-attachments/assets/e0963780-f754-48b3-8055-90018c1c953a" />
+<img width="692" height="84" alt="Captura de pantalla 2026-10-22 184313" src="https://github.com/user-attachments/assets/794a0133-a730-4db9-b463-ec81a3dfe958" />
+
 
 ¿Qué hace? Muestra los repositorios desde los que Ubuntu descarga programas y actualizaciones.
-<img width="762" height="325" alt="image" src="https://github.com/user-attachments/assets/a1fb377a-5705-4010-85e4-5059c8d078cb" />
+<img width="620" height="265" alt="image" src="https://github.com/user-attachments/assets/e69d488b-9735-4b52-908a-f5777b1f27f1" />
+
 
 El archivo `/etc/apt/sources.list.d/ubuntu.sources` contiene los repositorios de Ubuntu.
 
-- **Types:** indica que se descargan paquetes compilados (`deb`).
+- **Types:** indica que se descargan paquetes compilados (deb).
 - **URIs:** dirección del servidor desde donde se descargan los paquetes.
-- **Suites:** indica la versión de Ubuntu y los tipos de actualizaciones (`noble`, `noble-updates`, `noble-backports` y `noble-security`).
-- **Components:** clasifica el software en `main`, `restricted`, `universe` y `multiverse`.
+- **Suites:** indica la versión de Ubuntu y los tipos de actualizaciones (noble, noble-updates, noble-backports y noble-security).
+- **Components:** clasifica el software en main, restricted, universe y multiverse.
 - **Signed-By:** indica la clave utilizada para comprobar que los repositorios están firmados correctamente.
 
 El sistema utiliza un repositorio principal y otro de actualizaciones de seguridad.
@@ -68,7 +65,8 @@ B2. apt solo instala paquetes firmados por claves en las que confía. Mirad dón
 
 ls /etc/apt/trusted.gpg.d/ /usr/share/keyrings/ 2>/dev/null
 Nessus, por ejemplo, no viene de los repositorios de Ubuntu, lo descargasteis de Tenable. Si lo instalasteis con dpkg -i, apt no comprobó ninguna firma, la confianza la pusisteis vosotros.
-<img width="786" height="363" alt="image" src="https://github.com/user-attachments/assets/20a1ba05-641d-4206-a665-f55a7dcc3419" />
+<img width="793" height="308" alt="image" src="https://github.com/user-attachments/assets/490bc5d3-a4a0-43a6-b09e-a631d06109c6" />
+
 Este comando muestra las claves que pueden utilizarse para verificar la autenticidad de los repositorios
 
 
@@ -80,15 +78,16 @@ Podría conseguir que se aceptasen paquetes maliciosos si esa clave se configura
 Guardarla en /usr/share/keyrings/ por sí solo no basta.
 
 ¿y si intercepta o reemplaza la clave oficial de Ubuntu ubuntu-archive-keyrings.gpg?
-odría comprometer la seguridad de las actualizaciones, permitiendo aceptar paquetes falsificados si el atacante también controla el repositorio y firma su contenido con la clave correspondiente.
+Podría comprometer la seguridad de las actualizaciones, permitiendo aceptar paquetes falsificados si el atacante también controla el repositorio y firma su contenido con la clave correspondiente.
 
 Por eso es importante proteger las claves oficiales y verificar los paquetes instalados.
 
 B3. Información de un paquete concreto. Elegid openssh-server o curl:
 
-apt policy openssh-server
+apt policy curl
 Anotad: versión instalada, versión candidata, repositorio de origen y el significado de la tabla de versiones.
-<img width="895" height="307" alt="image" src="https://github.com/user-attachments/assets/6bffd3c1-e446-4fff-9587-068f6172dea6" />
+<img width="812" height="242" alt="image" src="https://github.com/user-attachments/assets/4d30d14e-c8bd-4519-a407-b170ffed00e6" />
+
 
 B4. Buscad paquetes instalados que no proceden de ningún repositorio (instalados a mano):
 
