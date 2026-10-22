@@ -65,7 +65,8 @@ B2. apt solo instala paquetes firmados por claves en las que confía. Mirad dón
 
 ls /etc/apt/trusted.gpg.d/ /usr/share/keyrings/ 2>/dev/null
 Nessus, por ejemplo, no viene de los repositorios de Ubuntu, lo descargasteis de Tenable. Si lo instalasteis con dpkg -i, apt no comprobó ninguna firma, la confianza la pusisteis vosotros.
-<img width="793" height="308" alt="image" src="https://github.com/user-attachments/assets/490bc5d3-a4a0-43a6-b09e-a631d06109c6" />
+<img width="792" height="288" alt="image" src="https://github.com/user-attachments/assets/5689ba0a-8fd0-4127-9291-2530afd72c53" />
+
 
 Este comando muestra las claves que pueden utilizarse para verificar la autenticidad de los repositorios
 
@@ -93,9 +94,11 @@ B4. Buscad paquetes instalados que no proceden de ningún repositorio (instalado
 
 apt list --installed 2>/dev/null | grep -i local
 Cada línea que salga merece una pregunta: ¿quién lo instaló, de dónde, y quién lo verificó?
-<img width="932" height="252" alt="image" src="https://github.com/user-attachments/assets/3c982c3f-f347-4d18-85a0-8b12b088ca25" />
+<img width="872" height="175" alt="Captura de pantalla 2026-10-22 191325" src="https://github.com/user-attachments/assets/83302df3-f277-48c0-b6e5-7f817e8a86cc" />
 
-He ejecutado el comando y he encontrado un paquete instalado localmente:
+
+
+Ejecutando el comando, ha salido el siguiente paquete instalado en local:
 
 - **Paquete:** Nessus
 - **Versión:** 10.12.4
@@ -116,7 +119,8 @@ Si salen líneas, la primera columna indica qué cambió (5 = el hash MD5 es dis
 - Si no aparece nada, no se han detectado diferencias.
 - Si aparecen líneas con 5, significa que el hash MD5 no coincide.
 - Si aparece una c, identifica un archivo de configuración, que puede haberse modificado legítimamente.
-<img width="665" height="195" alt="image" src="https://github.com/user-attachments/assets/13f1904d-c4b6-4781-9c29-1a3e2f2a19f4" />
+<img width="552" height="158" alt="image" src="https://github.com/user-attachments/assets/f3203d96-87cf-46a2-bfe9-08ca3d560dfe" />
+
 
 Pregunta B: dpkg -V ¿detectaría un rootkit que además hubiera modificado la base de datos de dpkg? ¿Por qué conviene comparar con una copia guardada fuera del sistema? (Pista: recordad la fase 4 de la intrusión.)
 He ejecutado `sudo dpkg -V` y se han detectado varios archivos modificados y otros que faltan.
@@ -133,23 +137,20 @@ Descargaremos un programa pequeño y real, GNU Hello, junto a su firma y la list
 
 ## C1. Descarga:
 mkdir -p ~/verif && cd ~/verif
+
 wget https://ftp.gnu.org/gnu/hello/hello-2.12.1.tar.gz
+
 wget https://ftp.gnu.org/gnu/hello/hello-2.12.1.tar.gz.sig
+
 wget https://ftp.gnu.org/gnu/gnu-keyring.gpg
-<img width="430" height="152" alt="image" src="https://github.com/user-attachments/assets/ca495190-4058-478d-bbba-ba2f50aeaea9" />
-<img width="920" height="342" alt="image" src="https://github.com/user-attachments/assets/0fce2ec9-9d2b-483a-9828-c105da47012d" />
-
-<img width="900" height="546" alt="image" src="https://github.com/user-attachments/assets/9501f29e-1049-4ee1-aa4c-15ad88603f2f" />
-<img width="750" height="158" alt="image" src="https://github.com/user-attachments/assets/d37ed490-e9c0-420a-87a4-ab6c8a74ccdd" />
-
-
-
+<img width="843" height="791" alt="image" src="https://github.com/user-attachments/assets/0c87c945-48b2-4a70-a116-75c3f710bdf6" />
 
 ## C2. Calculad el hash:
 
 sha256sum hello-2.12.1.tar.gz
 Comparadlo con vuestro compañero de al lado. ¿Sale igual? Debería.
-<img width="862" height="125" alt="image" src="https://github.com/user-attachments/assets/6ed237ae-67c3-45b2-85ea-6946c9dd6e16" />
+<img width="854" height="44" alt="image" src="https://github.com/user-attachments/assets/6376d2b9-8879-4089-84f5-361687166774" />
+
 Si tu compañero tiene exactamente el mismo archivo, debería obtener el mismo hash.
 
 
@@ -162,7 +163,7 @@ Nombre de quien firmó.
 Fecha de la firma.
 Identificador de la clave.
 
-<img width="882" height="255" alt="image" src="https://github.com/user-attachments/assets/e4e7ec44-b23a-4bb9-a033-11bf59fb60d3" />
+<img width="872" height="196" alt="image" src="https://github.com/user-attachments/assets/6323b946-9a66-47b7-9f50-646e94fa7bf2" />
 
 Resultado
 Resultado	Good signature (firma válida)
