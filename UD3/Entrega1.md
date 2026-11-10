@@ -21,63 +21,48 @@ dpkg -s acl
 ### Paso 2: Crear grupos y usuarios
 Creamos la estructura de tres grupos y nueve usuarios.
 
-```bash
-# 1. Crear los grupos
-sudo groupadd grupo1
-sudo groupadd grupo2
-sudo groupadd grupo3
 
-# 2. Crear los usuarios y asignarlos a sus respectivos grupos
-sudo useradd -m -g grupo1 usuario1
-sudo useradd -m -g grupo1 usuario2
-sudo useradd -m -g grupo1 usuario3
+<img width="582" height="354" alt="image" src="https://github.com/user-attachments/assets/eb3dbc69-d913-4e5b-939c-9aae56a4f3c5" />
 
-sudo useradd -m -g grupo2 usuario4
-sudo useradd -m -g grupo2 usuario5
-sudo useradd -m -g grupo2 usuario6
-
-sudo useradd -m -g grupo3 usuario7
-sudo useradd -m -g grupo3 usuario8
-sudo useradd -m -g grupo3 usuario9
-```
 
 > **Explicación:** 
 > * `-m` crea el directorio personal (`/home/usuarioX`).
 > * `-g` asigna el grupo primario especificado al usuario recién creado.
 
 #### Comprobación:
-```bash
-getent group grupo1 grupo2 grupo3
-id usuario1 usuario4 usuario7
-```
 
 
-<img width="451" height="86" alt="image" src="https://github.com/user-attachments/assets/ddad7845-6ac4-48a0-97da-d5ea66488529" />
+<img width="665" height="176" alt="image" src="https://github.com/user-attachments/assets/bffec257-a8a8-4467-9039-5e385aed71ed" />
+
+
+
+
 
 
 
 ### Paso 3: Crear la estructura de ficheros
-Creamos los recursos sobre los que aplicaremos las reglas de acceso.
 
-```bash
-# Crear el script/ejecutable
-touch hmi_planta
-chmod +x hmi_planta
+# Creamos los recursos sobre los que aplicaremos las reglas de acceso.
+<img width="442" height="45" alt="image" src="https://github.com/user-attachments/assets/74922841-ca70-4918-ad67-7fd03038274e" />
+
 
 # Crear la carpeta de planos y los ficheros simulados
-mkdir planos
-touch planos/autoclave.dwg planos/caldera.dwg planos/destilacion.dwg
-```
+<img width="873" height="67" alt="image" src="https://github.com/user-attachments/assets/281c8316-a4b7-473e-8edd-dd7f35149c1b" />
+
 
 > **Explicación:** `chmod +x` le otorga bit de ejecución al fichero `hmi_planta`. Los archivos dentro de `planos/` se crean como ficheros regulares vacíos.
 
 #### Comprobación:
-```bash
-ls -la
-ls -la planos/
-```
 
-* **📸 Captura 3:** Listado detallado (`ls -la`) que muestre la presencia del ejecutable `hmi_planta` y la carpeta `planos/` con sus tres ficheros `.dwg`.
+
+<img width="552" height="18" alt="image" src="https://github.com/user-attachments/assets/dd914225-baa9-4b08-9baf-9e211bb314d7" />
+
+
+<img width="519" height="21" alt="image" src="https://github.com/user-attachments/assets/08801ae0-1f11-4aae-b9cc-455006a15598" />
+
+
+<img width="603" height="178" alt="image" src="https://github.com/user-attachments/assets/19d94881-dded-453a-9e5c-55a2fee72f2e" />
+
 
 ---
 
@@ -86,17 +71,12 @@ ls -la planos/
 ### Paso 4 y 5: Asignar propietario y aplicar permisos restrictivos
 Asignamos un propietario administrativo (ej. `root`) y restringimos el acceso general (permisos tradicionales Unix) para obligar a que cualquier acceso específico de los usuarios o grupos de la práctica se resuelva mediante la tabla de ACLs.
 
-```bash
-# 1. Asignar propietario root tanto a los ficheros como a la carpeta
-sudo chown -R root:root hmi_planta planos/
 
-# 2. Permisos base restrictivos para el ejecutable (700 o 750)
-sudo chmod 700 hmi_planta
+<img width="513" height="87" alt="image" src="https://github.com/user-attachments/assets/fa407db9-d3fa-4350-898b-014ac6db7914" />
 
-# 3. Permisos base restrictivos para la carpeta y su contenido (700 para directorio, 600 para archivos)
-sudo chmod 700 planos/
-sudo chmod 600 planos/*.dwg
-```
+
+<img width="573" height="48" alt="image" src="https://github.com/user-attachments/assets/1e96040a-42cb-410a-b3ec-fccb4c7a81b9" />
+
 
 > **Explicación:** Al asignar permisos `700` (`rwx------`), únicamente el usuario `root` tiene acceso por los permisos estándar de Linux. El resto del mundo (`others`) y el grupo propietario no tienen permisos (`---`). De este modo, cualquier otro usuario dependerá exclusivamente de la ACL que le configuremos.
 
@@ -179,43 +159,55 @@ getfacl -R planos/
 
 Para comprobar que los permisos se cumplen de acuerdo con el diagrama, iniciamos sesión con los usuarios mediante `su -l <usuario>` y ejecutamos pruebas de acceso.
 
-#### Test 1: Usuario con permiso de ejecución sobre `hmi_planta`
-```bash
-sudo su -l usuario1
-./hmi_planta
-exit
-```
-* **📸 Captura 7:** Ejecución exitosa de `hmi_planta` como `usuario1`.
+# 1. ¿Por qué los permisos tradicionales de Unix son insuficientes?
+El modelo clásico de Linux (usuario, grupo y otros) resulta limitante porque únicamente contempla una única entidad por cada categoría (un solo dueño y un único grupo asociado). Es imposible definir políticas complejas y personalizadas para múltiples perfiles de forma simultánea.
 
-#### Test 2: Usuario SIN permiso de ejecución sobre `hmi_planta`
-```bash
-sudo su -l usuario7
-./hmi_planta
-exit
-```
-* **📸 Captura 8:** Error de `Permiso denegado` (*Permission denied*) al intentar ejecutar `hmi_planta` como `usuario7`.
+Caso práctico: Imaginemos el fichero hmi_planta. Requerimos que el personal de planta (operarios) tenga acceso de ejecución, que Néstor posea privilegios de lectura y ejecución, y que Lucía cuente con control total (lectura, escritura y ejecución). Los mecanismos de Unix estándar se quedan cortos ante esta variedad de combinaciones, obligando a recurrir a las ACL (Listas de Control de Acceso), las cuales abren la puerta a definir reglas personalizadas para cada usuario o colectivo de manera independiente.
 
-#### Test 3: Usuario con permisos de lectura y creación en `planos/`
-```bash
-sudo su -l usuario1
-ls -la planos/
-cat planos/autoclave.dwg
-touch planos/nuevo_plano.dwg
-exit
-```
-* **📸 Captura 9:** Confirmación de lectura y creación correcta del archivo `nuevo_plano.dwg`.
+# 2. Función de la máscara (mask) en las ACL
+La mask actúa como un techo o límite superior para los permisos efectivos de todos los usuarios y grupos específicos declarados en la ACL (a excepción del propietario original del fichero).
 
-#### Test 4: Comprobación de la Herencia (ACL Default)
-Verificar que el nuevo archivo creado en el paso anterior ha heredado automáticamente la ACL:
-```bash
-getfacl planos/nuevo_plano.dwg
-```
-* **📸 Captura 10:** Salida de `getfacl` sobre `planos/nuevo_plano.dwg` demostrando que heredó la ACL configurada con `-d`.
+Impacto real: Imaginemos esta situación:
 
-#### Test 5: Usuario SIN permisos sobre la carpeta `planos/`
-```bash
-sudo su -l usuario9
-ls -la planos/
-exit
+Plaintext
+user:lucia:rwx   mask::r-x
+A pesar de que el perfil de Lucía figure con el bloque completo rwx, el permiso de escritura quedará neutralizado debido a la restricción impuesta por la máscara (r-x). En consecuencia, los privilegios reales que entran en vigor surgen de la intersección (o cálculo lógico) entre los permisos asignados y el valor actual de la máscara.
+
+# 3. Diferencia clave entre la ACL de acceso y la ACL por defecto
+ACL de acceso (Access ACL):
+
+Definición: Es el conjunto de reglas activas que rigen de forma inmediata sobre un archivo o directorio ya existente.
+
+Ámbito: Se consulta cada vez que se intenta interactuar con el recurso.
+
+ACL por defecto (Default ACL):
+
+Definición: Funciona como una regla de herencia que únicamente se puede aplicar a directorios.
+
+Ámbito: No modifica los permisos del directorio contenedor, sino que se propaga automáticamente hacia abajo, dictando qué ACL heredarán los nuevos ficheros o carpetas que se creen en su interior.
+
+# 4. Alta de un nuevo operario y reutilización de permisos
+Si el entorno se ha estructurado correctamente empleando grupos, la integración de un nuevo empleado resulta sumamente ágil:
+
+### Creación de la cuenta de usuario (por ejemplo, pedro):
+
+```Bash
+sudo useradd -m -s /bin/bash pedro
 ```
-* **📸 Captura 11:** Mensaje de error `ls: cannot open directory 'planos/': Permission denied`.
+Inscripción en el grupo correspondiente:
+
+```Bash
+sudo usermod -aG operarios pedro
+```
+Validación de la pertenencia:
+```
+Bash
+id pedro
+```
+Gracias a que el fichero hmi_planta ya tiene configurado el acceso a través del grupo (g:operarios:--x), no hace falta modificar de nuevo las ACL. El recién incorporado heredará de forma automática dichos privilegios por el mero hecho de formar parte del grupo.
+
+Para comprobar que todo funciona correctamente, puedes ejecutar:
+```
+Bash
+sudo -u pedro test -x /home/hmi_planta && echo "Pedro tiene permiso de ejecución"
+```
