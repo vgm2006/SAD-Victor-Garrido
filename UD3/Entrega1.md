@@ -81,12 +81,10 @@ Asignamos un propietario administrativo (ej. `root`) y restringimos el acceso ge
 > **Explicación:** Al asignar permisos `700` (`rwx------`), únicamente el usuario `root` tiene acceso por los permisos estándar de Linux. El resto del mundo (`others`) y el grupo propietario no tienen permisos (`---`). De este modo, cualquier otro usuario dependerá exclusivamente de la ACL que le configuremos.
 
 #### Comprobación:
-```bash
-ls -ld hmi_planta planos/
-ls -l planos/
-```
 
-* **📸 Captura 4:** Listado de permisos POSIX tradicionales donde se confirme la pertenencia a `root:root` y las máscaras restrictivas (`-rwx------` / `drwx------`).
+
+<img width="542" height="243" alt="image" src="https://github.com/user-attachments/assets/cd8275b6-9b21-4963-a6c1-44b4d936fe2f" />
+
 
 ---
 
@@ -150,8 +148,13 @@ getfacl -R planos/
 
 > **Explicación:** `getfacl` muestra el propietario, el grupo propietario, los permisos habituales y la lista detallada de entradas de usuarios y grupos adicionales junto con la máscara activa.
 
-* **📸 Captura 5:** Salida en pantalla del comando `getfacl hmi_planta`.
-* **📸 Captura 6:** Salida completa del comando `getfacl -R planos/`.
+
+<img width="383" height="238" alt="image" src="https://github.com/user-attachments/assets/d44e6281-1617-4423-8fd8-125a4fa77350" />
+
+
+<img width="436" height="574" alt="image" src="https://github.com/user-attachments/assets/74bbc8a7-ff0a-4c62-addd-5fbcbc7322a5" />
+<img width="302" height="534" alt="image" src="https://github.com/user-attachments/assets/1c49bd1e-7872-4be5-b9d8-377d3f41a9be" />
+
 
 ---
 
