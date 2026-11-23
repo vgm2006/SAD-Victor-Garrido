@@ -44,46 +44,14 @@ Además de las zonas base propuestas (**Internet**, **DMZ**, **LAN** y **Zona Cr
 
 ## 3. Diagrama de la arquitectura de red
 
-```mermaid
-flowchart TB
-    Internet((Internet - No confiable))
-    Invitados[Wi-Fi Invitados - Aislada]
 
-    subgraph Perimetro [Seguridad Perimetral]
-        FW1[Firewall Perimetral / Exterior]
-        FW2[Firewall Interno / Core]
-    end
+<img width="1024" height="559" alt="image" src="https://github.com/user-attachments/assets/09f03954-8afb-40ca-aa07-7f50b4683982" />
 
-    subgraph DMZ [DMZ - Semiconfiable]
-        Web[Web Corporativa]
-        Mail[Relay Correo]
-        VPN[Pasarela VPN]
-        Proxy[Proxy Inverso / Saliente]
-    end
-
-    subgraph LAN [LAN - Confiable]
-        Equipos[Portátiles Ingenieros y Operarios]
-    end
-
-    subgraph Critica [Zona Crítica / Red OT - Restringida]
-        HMI[HMI Planta y Planos]
-        CA[Autoridad Certificación srv-ca]
-        Backup[Servidor Backups]
-        Logs[Servidor Logs / Monitorización]
-    end
-
-    Internet <-->|HTTPS / VPN / SMTP| FW1
-    Invitados -->|Solo salida Internet| FW1
-    FW1 <-->|Tráfico filtrado| DMZ
-    DMZ <-->|Solo flujos autorizados| FW2
-    FW2 <-->|Tráfico interno| LAN
-    FW2 <-->|Acceso muy restringido| Critica
-```
 
 ---
 
 ## 4. Pregunta de reflexión
 
-**Si cae (es comprometido) el servidor web, ¿qué puede hacer el atacante en tu diseño y qué se lo impide?**
+**Si el servidor web es comprometido, ¿Que puede hacer el atacante en tu diseño y qué se lo impide?**
 
 Si un atacante compromete el servidor web, únicamente podrá tomar el control de dicha máquina dentro de la **DMZ**, intentar atacar a otros servicios vecinos de esa misma subred o utilizar el servidor para lanzar ataques hacia el exterior. Sin embargo, el **cortafuegos interno (FW2)** bloquea por defecto cualquier conexión iniciada desde la DMZ hacia la **LAN**, la **Red OT** y la **Zona Crítica**, impidiendo que el atacante acceda a los equipos de los ingenieros, los planos, las copias de seguridad o el control de la planta. Además, como los registros se envían en tiempo real al servidor de monitorización en la Zona Crítica, el atacante tampoco podrá borrar las evidencias de su intrusión.
