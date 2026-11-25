@@ -13,18 +13,18 @@ Además de las zonas base propuestas (**Internet**, **DMZ**, **LAN** y **Zona Cr
 
 ### Tabla de ubicación y protocolos
 
-| Servicio | Zona | Protocolo(s) principal(es) | Justificación |
-| :--- | :--- | :--- | :--- |
-| **1. Web corporativa pública** | DMZ | HTTPS (TCP 443) | Debe ser accesible desde Internet por cualquier cliente, pero aislada de la LAN por si sufre un ataque web. |
-| **2. Servidor de correo** | DMZ (Relay) / LAN (Buzones) | SMTPS (TCP 465/587), IMAPS (TCP 993) | El relay de entrada/salida debe estar expuesto en DMZ para recibir correo externo, manteniendo los buzones internos protegidos. |
-| **3. Pasarela VPN** | DMZ (o Perímetro FW) | WireGuard (UDP 51820) / OpenVPN (UDP 1194) | Necesita recibir conexiones cifradas desde Internet para autenticar trabajadores remotos antes de darles paso a la red interna. |
-| **4. Proxy (saliente e inverso)** | DMZ | HTTP/HTTPS (TCP 80, 443, 3128) | El inverso protege y filtra peticiones entrantes hacia servidores web, y el saliente controla y cachea la navegación de la LAN hacia Internet. |
-| **5. HMI de planta y carpeta de planos** | Red OT / Zona Crítica | OPC-UA, Modbus/TCP, SMBv3 (cifrado) | Manejan maquinaria crítica y propiedad intelectual; requieren aislamiento estricto respecto a Internet y a la red ofimática general. |
-| **6. Autoridad de certificación (srv-ca)** | Zona Crítica | HTTPS / SCEP / EST (solo interno) | Si la CA raíz es comprometida se rompe toda la confianza criptográfica de la empresa, por lo que debe estar altamente restringida. |
-| **7. Servidor de copias de seguridad** | Zona Crítica | SSH/SFTP (TCP 22), SMB/NFS cifrado | Almacena todos los datos de la empresa y debe ser inaccesible desde redes de usuarios para evitar su cifrado por *ransomware*. |
-| **8. Portátiles de ingenieros y operarios** | LAN | DHCP, DNS, HTTPS, SMBv3, SSH | Son equipos de trabajo corporativos confiables que necesitan acceder a recursos internos y salir a Internet de forma controlada. |
-| **9. Wi-Fi de invitados** | Zona de Invitados | HTTP/HTTPS (TCP 80/443), DNS (UDP 53) | Son dispositivos externos no confiables que solo necesitan salida a Internet y deben estar totalmente aislados de la LAN y la DMZ. |
-| **10. Servidor de registros y monitorización** | Zona Crítica | Syslog TLS (TCP 6514), SNMPv3 (UDP 161) | Centraliza evidencias de seguridad de toda la red; debe estar blindado para que un atacante no pueda borrar sus rastros. |
+| Servicio | Zona | Justificación |
+| :--- | :--- | :--- |
+| **1. Web corporativa pública** | DMZ | Debe ser accesible desde Internet por cualquier cliente, pero aislada de la LAN por si sufre un ataque web. |
+| **2. Servidor de correo** | DMZ (Relay) / LAN (Buzones) | El relay de entrada/salida debe estar expuesto en DMZ para recibir correo externo, manteniendo los buzones internos protegidos. |
+| **3. Pasarela VPN** | DMZ (o Perímetro FW) | Necesita recibir conexiones cifradas desde Internet para autenticar trabajadores remotos antes de darles paso a la red interna. |
+| **4. Proxy (saliente e inverso)** | DMZ | El inverso protege y filtra peticiones entrantes hacia servidores web, y el saliente controla y cachea la navegación de la LAN hacia Internet. |
+| **5. HMI de planta y carpeta de planos** | Red OT / Zona Crítica | Manejan maquinaria crítica y propiedad intelectual; requieren aislamiento estricto respecto a Internet y a la red ofimática general. |
+| **6. Autoridad de certificación (srv-ca)** | Zona Crítica | Si la CA raíz es comprometida se rompe toda la confianza criptográfica de la empresa, por lo que debe estar altamente restringida. |
+| **7. Servidor de copias de seguridad** | Zona Crítica | Almacena todos los datos de la empresa y debe ser inaccesible desde redes de usuarios para evitar su cifrado por *ransomware*. |
+| **8. Portátiles de ingenieros y operarios** | LAN | Son equipos de trabajo corporativos confiables que necesitan acceder a recursos internos y salir a Internet de forma controlada. |
+| **9. Wi-Fi de invitados** | Zona de Invitados | Son dispositivos externos no confiables que solo necesitan salida a Internet y deben estar totalmente aislados de la LAN y la DMZ. |
+| **10. Servidor de registros y monitorización** | Zona Crítica | Centraliza evidencias de seguridad de toda la red; debe estar blindado para que un atacante no pueda borrar sus rastros. |
 
 ---
 
